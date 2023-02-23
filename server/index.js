@@ -1,8 +1,9 @@
 const express = require("express");
 const app = express();
+//dotenv - para carregar as variáveis de ambiente
 require('dotenv').config();
 const mysql = require("mysql2");
-//serve para não dar problema quando estiver fazendo a conexão do front-end com o back-end
+//cors - para não dar problema quando estiver fazendo a conexão do front-end com o back-end
 const cors = require("cors")
 
 const db = mysql.createPool({

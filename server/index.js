@@ -4,24 +4,63 @@ const app = express();
 //dotenv: para carregar as variáveis de ambiente
 require('dotenv').config();
 
+//databases
 const mysql = require("mysql2");
+const oracledb = require('oracledb');
+oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT
 
 //cors: para não dar problema quando estiver fazendo a conexão do front-end com o back-end
 const cors = require("cors")
-
-//estabelecendo conexão com o banco de dados
-const db = mysql.createPool({
-        host: process.env.DB_HOST,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASS,
-        database: process.env.DB_DATABASE 
-})
 
 app.use(cors());
 
 //transformando os dados do front-end em json
 app.use(express.json());
 
+
+//ORACLE
+async function run() {
+
+  let connection;
+
+  try {
+    connection = await oracledb.getConnection( {
+      user: process.env.ORADB_USER,
+      password: process.env.ORADB_PASS,
+      connectString: process.env.ORADB_CONNSTRING
+    });
+
+    const result = await connection.execute(
+      `SELECT *
+       FROM USUARIO
+       WHERE id_usuario = :id`,
+       [4324],  
+    );
+    console.log(result.rows);
+
+  } catch (err) {
+    console.error(err);
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }
+}
+
+run();
+
+//MYSQL
+//estabelecendo conexão com o MYSQL
+const db = mysql.createPool({
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASS,
+        database: process.env.DB_DATABASE 
+})
 
 //INSERINDO UM REGISTRO NA TABELA
 app.post("/register", (req, res) => {

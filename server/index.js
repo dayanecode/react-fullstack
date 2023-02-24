@@ -1,11 +1,15 @@
 const express = require("express");
 const app = express();
-//dotenv - para carregar as variáveis de ambiente
+
+//dotenv: para carregar as variáveis de ambiente
 require('dotenv').config();
+
 const mysql = require("mysql2");
-//cors - para não dar problema quando estiver fazendo a conexão do front-end com o back-end
+
+//cors: para não dar problema quando estiver fazendo a conexão do front-end com o back-end
 const cors = require("cors")
 
+//estabelecendo conexão com o banco de dados
 const db = mysql.createPool({
         host: process.env.DB_HOST,
         user: process.env.DB_USER,
@@ -14,7 +18,8 @@ const db = mysql.createPool({
 })
 
 app.use(cors());
-//para lermos os dados do Front precisamos transformá-los em json
+
+//transformando os dados do front-end em json
 app.use(express.json());
 
 

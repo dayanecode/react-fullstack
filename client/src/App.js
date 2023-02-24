@@ -2,16 +2,15 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 //Estilos
 import './App.css';
 
-//Páginas
-import CadastroTarefas from './pages/CadastroTarefas';
-import Home from './pages/Home'
-import CadastroCaixas from './pages/CadastroCaixas';
-
 //Componentes
 import Navbar from './components/Navbar/Navbar';
 
+//Páginas
+import Home from './pages/Home'
+import CadastroTarefas from './pages/CadastroTarefas';
+import CadastroCaixas from './pages/CadastroCaixas';
+
 function App() {
- 
   return (
     <div className='App'>
       <BrowserRouter>

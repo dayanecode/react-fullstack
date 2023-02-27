@@ -17,41 +17,46 @@ app.use(cors());
 //transformando os dados do front-end em json
 app.use(express.json());
 
-
 //ORACLE
-async function run() {
+//Pesquisando as caixas da diretoria pelo nome de EMPRESA
+app.get("/searchCaixaDir", (req, res) => {
 
-  let connection;
+    const empresa = 'PRODESP';
 
-  try {
-    connection = await oracledb.getConnection( {
-      user: process.env.ORADB_USER,
-      password: process.env.ORADB_PASS,
-      connectString: process.env.ORADB_CONNSTRING
-    });
+    async function runOracle() {
 
-    const result = await connection.execute(
-      `SELECT *
-       FROM USUARIO
-       WHERE id_usuario = :id`,
-       [4324],  
-    );
-    console.log(result.rows);
+      let connection;
 
-  } catch (err) {
-    console.error(err);
-  } finally {
-    if (connection) {
-      try {
-        await connection.close();
-      } catch (err) {
-        console.error(err);
+        try {
+          connection = await oracledb.getConnection( {
+            user: process.env.ORADB_USER,
+            password: process.env.ORADB_PASS,
+            connectString: process.env.ORADB_CONNSTRING
+          });
+
+          const result = await connection.execute(
+            `SELECT *
+            FROM DIRETORIA
+            WHERE EMPRESA = :empresa`,
+            [empresa],  
+          );
+          // Se der certo vai retornar os resultados
+           res.send(result.rows)
+          } catch (err) {
+            console.error(err);
+          } finally {
+              if (connection) {
+                try {
+                await connection.close();
+              } catch (err) {
+                console.error(err);
+              }
+            }
+        }
       }
-    }
-  }
-}
+      runOracle();
 
-run();
+});
 
 //MYSQL
 //estabelecendo conexão com o MYSQL
@@ -64,12 +69,15 @@ const db = mysql.createPool({
 
 //INSERINDO UM REGISTRO NA TABELA
 app.post("/register", (req, res) => {
+
+    const dataCriacao = new Date()
+  
     // const id = 51 // ID É AUTO INCREMENT, não precisa ser passado como parâmetro
     const task = req.body.task;
     const status = req.body.status;
-    const created_at = "2023-02-21";
+    const created_at = dataCriacao;
     const created_by = 'Daya Ramos';
-    const finished_in = "2023-02-21";
+    const finished_in = null;
     const comments = req.body.comments;
 
     let SQL = "INSERT INTO todo.tasks (task, status, created_at, created_by, finished_in, comments ) VALUES (?,?,?,?,?,?)"

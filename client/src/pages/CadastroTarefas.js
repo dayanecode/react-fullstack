@@ -59,13 +59,15 @@ const CadastroTarefas = () => {
                 placeholder='Tarefa'
                 onChange={handleAddTasks} 
             />
-            <input 
-                className='register--input'
-                type="text" 
-                name='status'
-                placeholder='Status'
-                onChange={handleAddTasks}  
-            />
+            <select className='register--select' name='status' defaultValue='' onChange={handleAddTasks}>         
+              <option value=""> </option>         
+              <option value="Para fazer">Para fazer </option>         
+              <option value="Iniciada">Iniciada </option>         
+              <option value="Em progresso">Em progresso </option>         
+              <option value="Paralisada">Paralisada </option>         
+              <option value="Finalizada">Finalizada </option>         
+              <option value="Rejeitada">Rejeitada </option>
+            </select>
             <input 
                 className='register--input'
                 type="text" 
